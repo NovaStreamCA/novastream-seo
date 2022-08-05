@@ -103,12 +103,15 @@ function acf_location_rule_match_seo( $match, $rule, $options, $field_group ) {
     $paramaters = get_field('seo_locations', 'option');
     $postType = get_post_type();
 
-    if(in_array($postType, $paramaters)) {
-        return true;
+    if($paramaters && is_array($paramaters)) {
+        if(in_array($postType, $paramaters)) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }
-
 }
 
 // Apply Open Graph
