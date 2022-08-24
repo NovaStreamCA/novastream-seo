@@ -150,6 +150,7 @@ function novastream_seo() {
             $title = get_bloginfo();
         }
 
+        echo '<meta name="description" content="' . $excerpt . '">';
         echo '<meta property="og:title" content="'.$title.'"/>';
         echo '<meta property="og:description" content="'.$excerpt.'"/>';
         echo '<meta property="og:url" content="'.get_the_permalink($postID).'"/>';
