@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Novastream SEO
- * @version 1.0.2
+ * @version 1.0.3
  */
 /*
 Plugin Name: Novastream SEO
 Plugin URI: https://novastream.ca
 Description: NovaStream's SEO Plugin
 Author: NovaStream
-Version: 1.0.2
+Version: 1.0.3
 Author URI: https://novastream.ca
 */
 
@@ -123,7 +123,7 @@ function novastream_seo() {
 
         if(get_field('seo_image', $postID)) {
             $image = get_field('seo_image', $postID);
-        } else if(has_post_thumbnail($postID)) {
+        } else if(has_post_thumbnail($postID) && !is_array(wp_get_attachment_image_src(get_post_thumbnail_id( $postID ), 'medium'))) {
             $image = wp_get_attachment_image_src(get_post_thumbnail_id( $postID ), 'medium');
         } else {
             $image = get_field('default_seo_image', 'option');
