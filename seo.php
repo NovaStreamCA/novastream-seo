@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Novastream SEO
- * @version 1.0.3
+ * @version 1.0.4
  */
 /*
 Plugin Name: Novastream SEO
 Plugin URI: https://novastream.ca
 Description: NovaStream's SEO Plugin
 Author: NovaStream
-Version: 1.0.3
+Version: 1.0.4
 Author URI: https://novastream.ca
 */
 
@@ -25,14 +25,17 @@ if(!class_exists("NovaStreamSEO"))
          */
         public function __construct()
         {
-            // Set up ACF
-            add_filter('acf/settings/path', function() {
-                return sprintf("%s/includes/advanced-custom-fields-pro/", dirname(__FILE__));
-            });
-            add_filter('acf/settings/dir', function() {
-                return sprintf("%s/includes/advanced-custom-fields-pro/", plugin_dir_url(__FILE__));
-            });
-            require_once(sprintf("%s/includes/advanced-custom-fields-pro/acf.php", dirname(__FILE__)));
+
+            if(!class_exists('ACF')) {
+                // Set up ACF
+                add_filter('acf/settings/path', function() {
+                    return sprintf("%s/includes/advanced-custom-fields-pro/", dirname(__FILE__));
+                });
+                add_filter('acf/settings/dir', function() {
+                    return sprintf("%s/includes/advanced-custom-fields-pro/", plugin_dir_url(__FILE__));
+                });
+                require_once(sprintf("%s/includes/advanced-custom-fields-pro/acf.php", dirname(__FILE__)));
+            }
 
             // Settings managed via ACF
             require_once(sprintf("%s/includes/settings.php", dirname(__FILE__)));
