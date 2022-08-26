@@ -12,3 +12,10 @@
 .edit-post-meta-boxes-area.is-side #acf-group_62ec034dd774a .postbox-header .order-lower-indicator {
     display: none !important;
 }
+
+.acf-block-fields .acf-field-62ec0593d7d45,
+.acf-block-fields .acf-field-62ec03ce911b7,
+.acf-block-fields .acf-field-62ec05caba705,
+.acf-block-fields .acf-field-62ec05d6ba706 {
+    display: none !important;
+}
