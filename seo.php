@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Novastream SEO
- * @version 1.0.5
+ * @version 1.0.6
  */
 /*
 Plugin Name: Novastream SEO
 Plugin URI: https://novastream.ca
 Description: NovaStream's SEO Plugin
 Author: NovaStream
-Version: 1.0.5
+Version: 1.0.6
 Author URI: https://novastream.ca
 */
 
@@ -154,6 +154,7 @@ function novastream_seo() {
         }
 
         echo '<meta name="description" content="' . $excerpt . '">';
+        echo '<meta name="title" content="' . $title . '">';
         echo '<meta property="og:title" content="'.$title.'"/>';
         echo '<meta property="og:description" content="'.$excerpt.'"/>';
         echo '<meta property="og:url" content="'.get_the_permalink($postID).'"/>';
