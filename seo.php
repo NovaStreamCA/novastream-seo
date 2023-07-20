@@ -132,10 +132,10 @@ function novastream_seo() {
         }
 
         // Get SEO Image
-        if(get_field('seo_image', $postID)) {
+       if(get_field('seo_image', $postID)) {
             $image = get_field('seo_image', $postID);
-        } else if(has_post_thumbnail($postID) && !is_array(wp_get_attachment_image_src(get_post_thumbnail_id( $postID ), 'medium'))) {
-            $image = wp_get_attachment_image_src(get_post_thumbnail_id( $postID ), 'medium');
+        } else if(has_post_thumbnail($postID) && get_the_post_thumbnail_url($postID, 'full')) {
+            $image = get_the_post_thumbnail_url($postID, 'full');
         } else {
             $image = get_field('default_seo_image', 'option');
         }
