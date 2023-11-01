@@ -159,6 +159,13 @@ function novastream_seo() {
             $title = get_field('default_seo_title', 'option');
         }
 
+        // Get SEO Tags
+        if(get_field('seo_tags', $postID)) {
+            $tags = get_field('seo_tags', $postID);
+        } else {
+            $tags = get_field('default_seo_tags', 'option');
+        }
+
         // Get Front Page Title
         if(is_front_page()) {
             $title = get_bloginfo();
@@ -196,15 +203,30 @@ function novastream_seo() {
             }
         }
 
-        echo '<meta name="description" content="' . $excerpt . '">';
-        echo '<meta name="title" content="' . $title . '">';
-        echo '<meta property="og:title" content="'.$title.'"/>';
-        echo '<meta property="og:description" content="'.$excerpt.'"/>';
-        echo '<meta property="og:url" content="'.$permalink.'"/>';
-        echo '<meta property="og:site_name" content="'.get_bloginfo().'"/>';
+        echo sprintf('<meta name="description" content="%s">', $excerpt);
+        echo sprintf('<meta name="title" content="%s">', $title);
+        echo sprintf('<meta property="og:title" content="%s">', $title);
+        echo sprintf('<meta property="og:description" content="%s">', $excerpt);
+        echo sprintf('<meta property="og:url" content="%s">', $permalink);
+        echo sprintf('<meta property="og:site_name" content="%s">', get_bloginfo());
+
         if($image) {
-            echo '<meta property="og:image" content="'.$image.'"/>';
+            echo sprintf('<meta property="og:image" content="%s">', $image);
         }
+
+        if($tags) {
+            echo sprintf('<meta name="keywords" content="%s">', $tags);
+        }
+
+        // echo '<meta name="description" content="' . $excerpt . '">';
+        // echo '<meta name="title" content="' . $title . '">';
+        // echo '<meta property="og:title" content="'.$title.'"/>';
+        // echo '<meta property="og:description" content="'.$excerpt.'"/>';
+        // echo '<meta property="og:url" content="'.$permalink.'"/>';
+        // echo '<meta property="og:site_name" content="'.get_bloginfo().'"/>';
+        // if($image) {
+        //     echo '<meta property="og:image" content="'.$image.'"/>';
+        // }
     }
 }
 

@@ -15,7 +15,7 @@ if(!class_exists('NovaStreamSEO_Settings'))
                 'page_title' => __('SEO & Social Sharing Options', 'novastream-seo'),
                 'menu_title' => __('SEO Options', 'novastream-seo'),
                 'menu_slug' => self::SLUG,
-                'capability' => 'manage_options',
+                'capability' => 'edit_posts',
                 'redirect' => false,
                 'icon_url' => 'dashicons-share'
             ));
@@ -37,7 +37,7 @@ if(!class_exists('NovaStreamSEO_Settings'))
                 self::SLUG,
                 __('Settings', 'custom'),
                 __('Settings', 'custom'),
-                'manage_options',
+                'edit_posts',
                 self::SLUG,
                 1
             );
@@ -130,6 +130,25 @@ if(!class_exists('NovaStreamSEO_Settings'))
                             'maxlength' => '',
                             'rows' => '',
                             'new_lines' => '',
+                        ),
+                        array(
+                            'key' => 'field_628e3a3b55b0z',
+                            'label' => 'Tags',
+                            'name' => 'default_seo_tags',
+                            'type' => 'text',
+                            'instructions' => 'Comma seperated list of tags describing the website',
+                            'required' => 0,
+                            'conditional_logic' => 0,
+                            'wrapper' => array(
+                                'width' => '',
+                                'class' => '',
+                                'id' => '',
+                            ),
+                            'default_value' => '',
+                            'placeholder' => 'Explore, Visit, Cafe',
+                            'prepend' => '',
+                            'append' => '',
+                            'maxlength' => '',
                         ),
                         array(
                             'key' => 'field_628e39fe50001',
@@ -249,6 +268,25 @@ if(!class_exists('NovaStreamSEO_Settings'))
                             'maxlength' => '',
                             'rows' => 2,
                             'new_lines' => '',
+                        ),
+                        array(
+                            'key' => 'field_628e3a3b55b0x',
+                            'label' => 'Tags',
+                            'name' => 'seo_tags',
+                            'type' => 'text',
+                            'instructions' => '',
+                            'required' => 0,
+                            'conditional_logic' => 0,
+                            'wrapper' => array(
+                                'width' => '',
+                                'class' => '',
+                                'id' => '',
+                            ),
+                            'default_value' => '',
+                            'placeholder' => 'Explore, Visit, Cafe',
+                            'prepend' => '',
+                            'append' => '',
+                            'maxlength' => '',
                         ),
                         array(
                             'key' => 'field_62ec05d6ba706',
