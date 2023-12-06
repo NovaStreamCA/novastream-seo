@@ -159,13 +159,6 @@ function novastream_seo() {
             $title = get_field('default_seo_title', 'option');
         }
 
-        // Get SEO Tags
-        if(get_field('seo_tags', $postID)) {
-            $tags = get_field('seo_tags', $postID);
-        } else {
-            $tags = get_field('default_seo_tags', 'option');
-        }
-
         // Get Front Page Title
         if(is_front_page()) {
             $title = get_bloginfo();
