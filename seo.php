@@ -58,6 +58,14 @@ if(!class_exists("NovaStreamSEO"))
             add_filter('acf/location/rule_match/seo', 'acf_location_rule_match_seo', 10, 4);
             add_action( 'admin_head', 'seo_style' );
             add_action('wp_head', 'novastream_seo', 5);
+
+            wp_enqueue_script(
+                'novastream-seo-js',
+                plugins_url('seo.js', __FILE__), // Path to the JS file
+                [],
+                '1.0.0',
+                true // Load in the footer
+            );
         } // END public function __construct()
     } // END class NovaStreamSEO
 } // END if(!class_exists("NovaStreamSEO"))
@@ -206,20 +214,6 @@ function novastream_seo() {
         if($image) {
             echo sprintf('<meta property="og:image" content="%s">', $image);
         }
-
-        if($tags) {
-            echo sprintf('<meta name="keywords" content="%s">', $tags);
-        }
-
-        // echo '<meta name="description" content="' . $excerpt . '">';
-        // echo '<meta name="title" content="' . $title . '">';
-        // echo '<meta property="og:title" content="'.$title.'"/>';
-        // echo '<meta property="og:description" content="'.$excerpt.'"/>';
-        // echo '<meta property="og:url" content="'.$permalink.'"/>';
-        // echo '<meta property="og:site_name" content="'.get_bloginfo().'"/>';
-        // if($image) {
-        //     echo '<meta property="og:image" content="'.$image.'"/>';
-        // }
     }
 }
 
