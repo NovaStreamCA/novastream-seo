@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Novastream SEO
- * @version 1.1.1
+ * @version 1.1.2
  */
 /*
 Plugin Name: Novastream SEO
 Plugin URI: https://novastream.ca
 Description: NovaStream's SEO Plugin
 Author: NovaStream
-Version: 1.1.1
+Version: 1.1.2
 Author URI: https://novastream.ca
 */
 
