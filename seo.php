@@ -132,43 +132,41 @@ function novastream_seo() {
     if($post) {
         $postID = $post->ID;
 
-        // Override if WooCommerce Shop Page
-        if(function_exists('is_shop')) {
-            if(is_shop()) {
-                $postID = wc_get_page_id( 'shop' );
-            }
+         // Override if WooCommerce Shop Page
+        if (function_exists('is_shop') && is_shop()) {
+            $postID = wc_get_page_id('shop');
         }
 
         // Get SEO Image
-       if(get_field('seo_image', $postID)) {
+        if (get_field('seo_image', $postID)) {
             $image = get_field('seo_image', $postID);
-        } else if(has_post_thumbnail($postID) && get_the_post_thumbnail_url($postID, 'full')) {
+        } elseif (has_post_thumbnail($postID) && get_the_post_thumbnail_url($postID, 'full')) {
             $image = get_the_post_thumbnail_url($postID, 'full');
         } else {
             $image = get_field('default_seo_image', 'option');
         }
 
         // Get SEO Description
-        if(get_field('seo_description', $postID)) {
+        if (get_field('seo_description', $postID)) {
             $excerpt = get_field('seo_description', $postID);
-        } else if($excerpt = get_the_excerpt($postID)) {
+        } elseif ($excerpt = get_the_excerpt($postID)) {
             $excerpt = strip_tags($excerpt);
-            $excerpt = str_replace("", "'", $excerpt);
+            $excerpt = str_replace('"', "'", $excerpt); // Replace double quotes with single quotes
         } else {
             $excerpt = get_field('default_seo_description', 'option');
         }
 
         // Get SEO Title
-        if(get_field('seo_title', $postID)) {
+        if (get_field('seo_title', $postID)) {
             $title = get_field('seo_title', $postID);
-        } else if(get_the_title($postID)) {
+        } elseif (get_the_title($postID)) {
             $title = get_the_title($postID);
         } else {
             $title = get_field('default_seo_title', 'option');
         }
 
         // Get Front Page Title
-        if(is_front_page()) {
+        if (is_front_page()) {
             $title = get_bloginfo();
         }
 
@@ -176,43 +174,41 @@ function novastream_seo() {
         $permalink = get_the_permalink($postID);
 
         // Override if WooCommerce Category Page
-        if(function_exists('is_product_category')) {
-            if(is_product_category()) {
-                $term = get_queried_object();
-                if($term->term_id) {
+        if (function_exists('is_product_category') && is_product_category()) {
+            $term = get_queried_object();
+            if ($term->term_id) {
+                if ($term->name) {
+                    $title = $term->name;
+                }
 
-                    if($term->name) {
-                        $title = $term->name;
-                    }
-                    
-                    if($term->description) {
-                        $excerpt = $term->description;
-                    } else {
-                        $excerpt = get_field('default_seo_description', 'option');
-                    }
+                if ($term->description) {
+                    $excerpt = $term->description;
+                } else {
+                    $excerpt = get_field('default_seo_description', 'option');
+                }
 
-                    if(get_term_link( $term->term_id, 'product_cat' )) {
-                        $permalink = get_term_link( $term->term_id, 'product_cat' );
-                    }
+                if (get_term_link($term->term_id, 'product_cat')) {
+                    $permalink = get_term_link($term->term_id, 'product_cat');
+                }
 
-                    if($thumbnailId = get_term_meta( $term->term_id, 'thumbnail_id', true )) {
-                        $image = wp_get_attachment_url( $thumbnailId );
-                    } else {
-                        $image = get_field('default_seo_image', 'option');
-                    }
+                if ($thumbnailId = get_term_meta($term->term_id, 'thumbnail_id', true)) {
+                    $image = wp_get_attachment_url($thumbnailId);
+                } else {
+                    $image = get_field('default_seo_image', 'option');
                 }
             }
         }
 
-        echo sprintf('<meta name="description" content="%s">', $excerpt);
-        echo sprintf('<meta name="title" content="%s">', $title);
-        echo sprintf('<meta property="og:title" content="%s">', $title);
-        echo sprintf('<meta property="og:description" content="%s">', $excerpt);
-        echo sprintf('<meta property="og:url" content="%s">', $permalink);
-        echo sprintf('<meta property="og:site_name" content="%s">', get_bloginfo());
+        // Escape and output meta tags
+        echo sprintf('<meta name="description" content="%s">', esc_attr($excerpt));
+        echo sprintf('<meta name="title" content="%s">', esc_attr($title));
+        echo sprintf('<meta property="og:title" content="%s">', esc_attr($title));
+        echo sprintf('<meta property="og:description" content="%s">', esc_attr($excerpt));
+        echo sprintf('<meta property="og:url" content="%s">', esc_url($permalink));
+        echo sprintf('<meta property="og:site_name" content="%s">', esc_attr(get_bloginfo()));
 
-        if($image) {
-            echo sprintf('<meta property="og:image" content="%s">', $image);
+        if ($image) {
+            echo sprintf('<meta property="og:image" content="%s">', esc_url($image));
         }
     }
 }
