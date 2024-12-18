@@ -56,9 +56,16 @@ if(!class_exists("NovaStreamSEO"))
             add_filter('acf/location/rule_operators', 'acf_location_rules_operators');
             add_filter('acf/location/rule_values/seo', 'acf_location_rule_values_seo');
             add_filter('acf/location/rule_match/seo', 'acf_location_rule_match_seo', 10, 4);
+
+            // Add SEO Styles and Scripts
+            add_action('wp_enqueue_scripts', [$this, 'seo_scripts']);
+
             add_action( 'admin_head', 'seo_style' );
             add_action('wp_head', 'novastream_seo', 5);
+        } // END public function __construct()
 
+        public function seo_scripts() {
+            // Enqueue the JavaScript file
             wp_enqueue_script(
                 'novastream-seo-js',
                 plugins_url('seo.js', __FILE__), // Path to the JS file
@@ -66,7 +73,7 @@ if(!class_exists("NovaStreamSEO"))
                 '1.0.0',
                 true // Load in the footer
             );
-        } // END public function __construct()
+        }
     } // END class NovaStreamSEO
 } // END if(!class_exists("NovaStreamSEO"))
 
