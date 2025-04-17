@@ -12,6 +12,32 @@ Version: 1.1.3
 Author URI: https://novastream.ca
 */
 
+add_action( 'init', function() {
+    // 1) Register your (empty) text‑domain.
+    //    You don't have .mo files? No problem—this simply
+    //    tells WP “this domain is OK now,” so it won't JIT-load too early.
+    load_plugin_textdomain(
+        'novastream-seo',
+        false,
+        dirname( plugin_basename(__FILE__) ) . '/languages'
+    );
+
+    // 2) Bundle ACF (only after init, when load_textdomain is allowed)
+    if ( ! class_exists('ACF') ) {
+        add_filter('acf/settings/path', fn() => plugin_dir_path(__FILE__) . 'includes/advanced-custom-fields-pro/');
+        add_filter('acf/settings/dir',  fn() => plugin_dir_url(__FILE__)  . 'includes/advanced-custom-fields-pro/');
+        require_once plugin_dir_path(__FILE__) . 'includes/advanced-custom-fields-pro/acf.php';
+    }
+
+    // 3) Load your settings class (where __() lives)
+    require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
+
+    // 4) Finally instantiate
+    if ( class_exists('NovaStreamSEO') ) {
+        new NovaStreamSEO();
+    }
+}, 5 );
+
 if(!class_exists("NovaStreamSEO"))
 {
     /**
@@ -26,19 +52,19 @@ if(!class_exists("NovaStreamSEO"))
         public function __construct()
         {
 
-            if(!class_exists('ACF')) {
-                // Set up ACF
-                add_filter('acf/settings/path', function() {
-                    return sprintf("%s/includes/advanced-custom-fields-pro/", dirname(__FILE__));
-                });
-                add_filter('acf/settings/dir', function() {
-                    return sprintf("%s/includes/advanced-custom-fields-pro/", plugin_dir_url(__FILE__));
-                });
-                require_once(sprintf("%s/includes/advanced-custom-fields-pro/acf.php", dirname(__FILE__)));
-            }
+            // if(!class_exists('ACF')) {
+            //     // Set up ACF
+            //     add_filter('acf/settings/path', function() {
+            //         return sprintf("%s/includes/advanced-custom-fields-pro/", dirname(__FILE__));
+            //     });
+            //     add_filter('acf/settings/dir', function() {
+            //         return sprintf("%s/includes/advanced-custom-fields-pro/", plugin_dir_url(__FILE__));
+            //     });
+            //     require_once(sprintf("%s/includes/advanced-custom-fields-pro/acf.php", dirname(__FILE__)));
+            // }
 
             // Settings managed via ACF
-            require_once(sprintf("%s/includes/settings.php", dirname(__FILE__)));
+            // require_once(sprintf("%s/includes/settings.php", dirname(__FILE__)));
             $settings = new NovaStreamSEO_Settings(plugin_basename(__FILE__));
 
             //Github plugin updater
@@ -76,12 +102,6 @@ if(!class_exists("NovaStreamSEO"))
         }
     } // END class NovaStreamSEO
 } // END if(!class_exists("NovaStreamSEO"))
-
-// add_action('init', function() {
-    if(class_exists('NovaStreamSEO')) {
-        $plugin = new NovaStreamSEO();
-    }
-// });
 
 // ACF to show all post types as checkbox
 function acf_load_post_types($field) {
