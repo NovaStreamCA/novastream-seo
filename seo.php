@@ -77,11 +77,11 @@ if(!class_exists("NovaStreamSEO"))
     } // END class NovaStreamSEO
 } // END if(!class_exists("NovaStreamSEO"))
 
-add_action('init', function() {
+// add_action('init', function() {
     if(class_exists('NovaStreamSEO')) {
-        new NovaStreamSEO();
+        $plugin = new NovaStreamSEO();
     }
-});
+// });
 
 // ACF to show all post types as checkbox
 function acf_load_post_types($field) {
