@@ -91,7 +91,7 @@ if(!class_exists('NovaStreamSEO_Settings'))
                             'max_width' => '',
                             'max_height' => '',
                             'max_size' => '',
-                            'mime_types' => '',
+                            'mime_types' => apply_filters('novastream_seo_image_mime_types', ''),
                         ),
                         array(
                             'key' => 'field_628e3a3b55b0a',
@@ -275,7 +275,7 @@ if(!class_exists('NovaStreamSEO_Settings'))
                             'max_width' => '',
                             'max_height' => '',
                             'max_size' => '',
-                            'mime_types' => '',
+                            'mime_types' => apply_filters('novastream_seo_image_mime_types', ''),
                         ),
                     ),
                     'location' => array(
