@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Novastream SEO
- * @version 1.1.5
+ * @version 1.1.6
  */
 /*
 Plugin Name: Novastream SEO
