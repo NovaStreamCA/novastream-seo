@@ -8,7 +8,7 @@ Plugin Name: Novastream SEO
 Plugin URI: https://novastream.ca
 Description: NovaStream's SEO Plugin
 Author: NovaStream
-Version: 1.1.5
+Version: 1.1.6
 Author URI: https://novastream.ca
 */
 
