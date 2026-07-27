@@ -39,6 +39,7 @@ if(!class_exists('NovaStreamSEO_Settings'))
                 __('Settings', 'custom'),
                 'edit_posts',
                 self::SLUG,
+                '',
                 1
             );
         }
