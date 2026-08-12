@@ -180,7 +180,7 @@ function novastream_seo() {
         } else {
             $excerpt = get_field('default_seo_description', 'option');
         }
-        $excerpt = str_replace('"', "'", $excerpt); // Replace double quotes with single quotes
+        $excerpt = str_replace('"', "'", (string) ($excerpt ?? '')); // Replace double quotes with single quotes
 
         // Get SEO Title
         if (get_field('seo_title', $postID)) {
@@ -190,7 +190,7 @@ function novastream_seo() {
         } else {
             $title = get_field('default_seo_title', 'option');
         }
-        $title = str_replace('"', "'", $title); // Replace double quotes with single quotes
+        $title = str_replace('"', "'", (string) ($title ?? '')); // Replace double quotes with single quotes
 
         // Get Front Page Title
         if (is_front_page()) {
@@ -214,7 +214,7 @@ function novastream_seo() {
                 } else {
                     $excerpt = get_field('default_seo_description', 'option');
                 }
-                $excerpt = str_replace('"', "'", $excerpt); // Replace double quotes with single quotes
+                $excerpt = str_replace('"', "'", (string) ($excerpt ?? '')); // Replace double quotes with single quotes
 
                 if (get_term_link($term->term_id, 'product_cat')) {
                     $permalink = get_term_link($term->term_id, 'product_cat');
