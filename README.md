@@ -14,9 +14,10 @@ administrator notice on older or manually managed installations.
 
 ## Updates and releases
 
-The plugin checks the public GitHub repository's `main` branch for updates. Do
-not add a GitHub token, deploy key, or other credential to the plugin: every
-file shipped with a WordPress plugin must be treated as public.
+The plugin uses Plugin Update Checker 5.7 to follow stable, non-prerelease
+GitHub releases and tags. Commits on `main` are not a production release by
+themselves. Do not add a GitHub token, deploy key, or other credential to the
+plugin: every file shipped with a WordPress plugin must be treated as public.
 
 To publish a release:
 
@@ -27,6 +28,10 @@ To publish a release:
 
 The repository must remain public for credential-free update checks and
 downloads to work on installed sites.
+
+The updater is vendored at `vendor/plugin-update-checker`. When upgrading it,
+copy the official runtime package and retain its MIT `license.txt`; do not
+copy examples, build scripts, or development configuration into this plugin.
 
 ## Security
 

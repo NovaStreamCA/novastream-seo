@@ -1,28 +1,27 @@
 <?php
 /**
  * @package Novastream SEO
- * @version 1.2.0
+ * @version 1.2.1
  */
 /*
 Plugin Name: Novastream SEO
 Plugin URI: https://novastream.ca
 Description: NovaStream's SEO Plugin
 Author: NovaStream
-Version: 1.2.0
+Version: 1.2.1
 Update URI: https://github.com/NovaStreamCA/novastream-seo
 Requires Plugins: advanced-custom-fields-pro
 Author URI: https://novastream.ca
 Text Domain: novastream-seo
 */
 
-require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker.php';
+require_once plugin_dir_path( __FILE__ ) . 'vendor/plugin-update-checker/plugin-update-checker.php';
 
-$novastream_seo_update_checker = Puc_v4_Factory::buildUpdateChecker(
+$novastream_seo_update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
     'https://github.com/NovaStreamCA/novastream-seo',
     __FILE__,
     'novastream-seo'
 );
-$novastream_seo_update_checker->setBranch( 'main' );
 
 /**
  * Determine whether the external ACF Pro dependency is active and usable.
