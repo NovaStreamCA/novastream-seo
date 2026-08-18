@@ -228,6 +228,14 @@ function novastream_seo() {
             }
         }
 
+		/**
+         * Filters the final image URL used for Open Graph metadata.
+         *
+         * @param string|false $image  Selected social image URL.
+         * @param int          $postID Post ID used to build the metadata.
+         */
+        $image = apply_filters('novastream_seo_social_image', $image, $postID);
+
         // Escape and output meta tags
         echo sprintf('<meta name="description" content="%s">', esc_attr($excerpt));
         echo sprintf('<meta name="title" content="%s">', esc_attr($title));
