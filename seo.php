@@ -1,40 +1,82 @@
 <?php
 /**
  * @package Novastream SEO
- * @version 1.1.9
+ * @version 1.2.0
  */
 /*
 Plugin Name: Novastream SEO
 Plugin URI: https://novastream.ca
 Description: NovaStream's SEO Plugin
 Author: NovaStream
-Version: 1.1.9
+Version: 1.2.0
 Update URI: https://github.com/NovaStreamCA/novastream-seo
+Requires Plugins: advanced-custom-fields-pro
 Author URI: https://novastream.ca
+Text Domain: novastream-seo
 */
 
-add_action( 'init', function() {
-    // 1) Register your (empty) text‑domain.
-    //    You don't have .mo files? No problem—this simply
-    //    tells WP “this domain is OK now,” so it won't JIT-load too early.
-    load_plugin_textdomain(
-        'novastream-seo',
-        false,
-        dirname( plugin_basename(__FILE__) ) . '/languages'
-    );
+require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker.php';
 
-    // 2) Bundle ACF (only after init, when load_textdomain is allowed)
-    if ( ! class_exists('ACF') ) {
-        add_filter('acf/settings/path', fn() => plugin_dir_path(__FILE__) . 'includes/advanced-custom-fields-pro/');
-        add_filter('acf/settings/dir',  fn() => plugin_dir_url(__FILE__)  . 'includes/advanced-custom-fields-pro/');
-        require_once plugin_dir_path(__FILE__) . 'includes/advanced-custom-fields-pro/acf.php';
+$novastream_seo_update_checker = Puc_v4_Factory::buildUpdateChecker(
+    'https://github.com/NovaStreamCA/novastream-seo',
+    __FILE__,
+    'novastream-seo'
+);
+$novastream_seo_update_checker->setBranch( 'main' );
+
+/**
+ * Determine whether the external ACF Pro dependency is active and usable.
+ */
+function novastream_seo_has_acf_pro() {
+    return function_exists( 'acf_add_local_field_group' )
+        && function_exists( 'acf_add_options_page' )
+        && function_exists( 'get_field' );
+}
+
+/**
+ * Stop activation on WordPress versions that do not enforce Requires Plugins.
+ */
+function novastream_seo_activate() {
+    if ( novastream_seo_has_acf_pro() ) {
+        return;
     }
 
-    // 3) Load your settings class (where __() lives)
-    require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
+    deactivate_plugins( plugin_basename( __FILE__ ) );
 
-    // 4) Finally instantiate
-    if ( class_exists('NovaStreamSEO') ) {
+    wp_die(
+        esc_html__( 'NovaStream SEO requires Advanced Custom Fields Pro to be installed and active.', 'novastream-seo' ),
+        esc_html__( 'Plugin dependency missing', 'novastream-seo' ),
+        array( 'back_link' => true )
+    );
+}
+register_activation_hook( __FILE__, 'novastream_seo_activate' );
+
+/**
+ * Explain a missing dependency if ACF Pro is removed outside WordPress.
+ */
+function novastream_seo_acf_notice() {
+    if ( ! current_user_can( 'activate_plugins' ) ) {
+        return;
+    }
+
+    printf(
+        '<div class="notice notice-error"><p>%s</p></div>',
+        esc_html__( 'NovaStream SEO is inactive because Advanced Custom Fields Pro is not installed and active.', 'novastream-seo' )
+    );
+}
+
+add_action( 'init', function() {
+    load_plugin_textdomain( 'novastream-seo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
+    if ( ! novastream_seo_has_acf_pro() ) {
+        add_action( 'admin_notices', 'novastream_seo_acf_notice' );
+        add_action( 'network_admin_notices', 'novastream_seo_acf_notice' );
+        return;
+    }
+
+    require_once plugin_dir_path( __FILE__ ) . 'includes/settings.php';
+
+    if ( class_exists( 'NovaStreamSEO' ) ) {
         new NovaStreamSEO();
     }
 }, 5 );
@@ -52,30 +94,7 @@ if(!class_exists("NovaStreamSEO"))
          */
         public function __construct()
         {
-
-            // if(!class_exists('ACF')) {
-            //     // Set up ACF
-            //     add_filter('acf/settings/path', function() {
-            //         return sprintf("%s/includes/advanced-custom-fields-pro/", dirname(__FILE__));
-            //     });
-            //     add_filter('acf/settings/dir', function() {
-            //         return sprintf("%s/includes/advanced-custom-fields-pro/", plugin_dir_url(__FILE__));
-            //     });
-            //     require_once(sprintf("%s/includes/advanced-custom-fields-pro/acf.php", dirname(__FILE__)));
-            // }
-
-            // Settings managed via ACF
-            // require_once(sprintf("%s/includes/settings.php", dirname(__FILE__)));
-            $settings = new NovaStreamSEO_Settings(plugin_basename(__FILE__));
-
-            //Github plugin updater
-            require 'plugin-update-checker.php';
-            $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-                'https://github.com/NovaStreamCA/novastream-seo',
-                __FILE__,
-                'novastream-seo'
-            );
-            $myUpdateChecker->setBranch('main');
+            new NovaStreamSEO_Settings(plugin_basename(__FILE__));
 
             // Add ACF Filters
             add_filter('acf/load_field/name=seo_locations', 'acf_load_post_types');
@@ -84,23 +103,9 @@ if(!class_exists("NovaStreamSEO"))
             add_filter('acf/location/rule_values/seo', 'acf_location_rule_values_seo');
             add_filter('acf/location/rule_match/seo', 'acf_location_rule_match_seo', 10, 4);
 
-            // Add SEO Styles and Scripts
-            add_action('wp_enqueue_scripts', [$this, 'seo_scripts']);
-
             add_action( 'admin_head', 'seo_style' );
             add_action('wp_head', 'novastream_seo', 5);
         } // END public function __construct()
-
-        public function seo_scripts() {
-            // Enqueue the JavaScript file
-            wp_enqueue_script(
-                'novastream-seo-js',
-                plugins_url('seo.js', __FILE__), // Path to the JS file
-                [],
-                '1.0.0',
-                true // Load in the footer
-            );
-        }
     } // END class NovaStreamSEO
 } // END if(!class_exists("NovaStreamSEO"))
 
@@ -237,16 +242,26 @@ function novastream_seo() {
          */
         $image = apply_filters('novastream_seo_social_image', $image, $postID);
 
-        // Escape and output meta tags
-        echo sprintf('<meta name="description" content="%s">', esc_attr($excerpt));
-        echo sprintf('<meta name="title" content="%s">', esc_attr($title));
-        echo sprintf('<meta property="og:title" content="%s">', esc_attr($title));
-        echo sprintf('<meta property="og:description" content="%s">', esc_attr($excerpt));
-        echo sprintf('<meta property="og:url" content="%s">', esc_url($permalink));
-        echo sprintf('<meta property="og:site_name" content="%s">', esc_attr(get_bloginfo()));
+        // Only render tags with meaningful server-side values.
+        if ( $excerpt !== '' ) {
+            printf( '<meta name="description" content="%s">', esc_attr( $excerpt ) );
+            printf( '<meta property="og:description" content="%s">', esc_attr( $excerpt ) );
+        }
+
+        if ( $title !== '' ) {
+            printf( '<meta property="og:title" content="%s">', esc_attr( $title ) );
+        }
+
+        if ( $permalink ) {
+            printf( '<meta property="og:url" content="%s">', esc_url( $permalink ) );
+        }
+
+        if ( get_bloginfo() ) {
+            printf( '<meta property="og:site_name" content="%s">', esc_attr( get_bloginfo() ) );
+        }
 
         if ($image) {
-            echo sprintf('<meta property="og:image" content="%s">', esc_url($image));
+            printf( '<meta property="og:image" content="%s">', esc_url( $image ) );
         }
     }
 }

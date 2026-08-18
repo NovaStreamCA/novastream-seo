@@ -2,6 +2,16 @@
 
 NovaStream's WordPress SEO plugin.
 
+## Requirements
+
+- WordPress 6.5 or newer is recommended for native plugin-dependency handling.
+- Advanced Custom Fields Pro must be installed and active separately.
+
+ACF Pro is intentionally not bundled with this plugin. WordPress can enforce
+the dependency when ACF Pro uses its standard `advanced-custom-fields-pro`
+plugin directory. A runtime check also prevents fatal errors and displays an
+administrator notice on older or manually managed installations.
+
 ## Updates and releases
 
 The plugin checks the public GitHub repository's `main` branch for updates. Do
